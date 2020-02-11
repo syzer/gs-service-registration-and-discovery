@@ -6,6 +6,15 @@
 This guide walks you through the process of starting and using the Netflix Eureka service
 registry.
 
+# WAT
+```bash
+./mvnw spring-boot:run -pl eureka-service
+```
+
+```bash
+nodemon -w ./ -e java -x './mvnw spring-boot:run -pl eureka-client'
+```
+
 == What You Will Build
 
 You will set up a

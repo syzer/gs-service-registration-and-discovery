@@ -1,5 +1,8 @@
 package com.example.serviceregistrationanddiscoveryclient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,20 +19,40 @@ import java.util.List;
 @SpringBootApplication
 public class ServiceRegistrationAndDiscoveryClientApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServiceRegistrationAndDiscoveryClientApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceRegistrationAndDiscoveryClientApplication.class, args);
+    }
+}
+
+class Example {
+    private String color;
+    private String type;
 }
 
 @RestController
 class ServiceInstanceRestController {
 
-	@Autowired
-	private DiscoveryClient discoveryClient;
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
-	@RequestMapping("/service-instances/{applicationName}")
-	public List<ServiceInstance> serviceInstancesByApplicationName(
-			@PathVariable String applicationName) {
-		return this.discoveryClient.getInstances(applicationName);
-	}
+    @RequestMapping("/service-instances/{applicationName}")
+    public List<ServiceInstance> serviceInstancesByApplicationName(
+            @PathVariable String applicationName) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String json = "{ \"color\" : \"Red\", \"type\" : \"CacheEvent\" }";
+            Example example = objectMapper.readValue(json, Example.class);
+
+            String jsonRepresentation = objectMapper.writeValueAsString(example);
+            System.out.println(jsonRepresentation);
+        }
+        catch(Exception e) {
+            //  Block of code to handle errors
+        }
+
+        System.out.println("=====================");
+
+        return this.discoveryClient.getInstances(applicationName);
+    }
 }
